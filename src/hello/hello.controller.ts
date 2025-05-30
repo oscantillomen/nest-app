@@ -5,6 +5,6 @@ import { Request, Response } from 'express';
 export class HelloController {
   @Get('/')
   index(@Req() request: Request, @Res() response: Response) {
-    response.status(200).json({ message: 'Hello world!' });
+    response.status(200).json({ message: 'Hello world!!!' });
   }
 }
