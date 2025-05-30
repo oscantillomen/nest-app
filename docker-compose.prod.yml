@@ -1,0 +1,33 @@
+services:
+  db:
+    container_name: nest-db
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  
+  app:
+    image: ocantill4/nest-app:1.0.0
+    container_name: nest-app
+    ports:
+      - ${PORT}:${PORT}
+    environment:
+      STAGE: prod
+      PORT: ${PORT}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      APP_VERSION: ${APP_VERSION}
+      DATABASE_URL: ${DATABASE_URL}
+
+volumes:
+  db_data:
+    external: false
