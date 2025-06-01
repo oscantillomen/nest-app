@@ -31,4 +31,4 @@ jobs:
     
     - name: Push Docker image
       run: |
-        docker push ocantill4/nest-app:1.0.2 .
+        docker push ocantill4/nest-app:1.0.2
