@@ -18,17 +18,33 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Git Semantic Version
+      uses: PaulHatch/semantic-version@v4.0.3
+      with:
+        major_pattern: "major:"
+        minor_pattern: "feat:"
+        patch_pattern: "fix:"
+        format: "${major}.${minor}.${patch}-prerelease${increment}"
+      id: version
+
     - name: Docker login
       env:
         DOCKER_USER: ${{ secrets.DOCKER_USER }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        NEW_VERSION: ${{ steps.version.outputs.version }}
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
 
     - name: Build Docker Image
+      env:
+        NEW_VERSION: ${{ steps.version.outputs.version }}
       run: |
-        docker build -t ocantill4/nest-app:1.0.2 .
+        docker build -t ocantill4/nest-app:$NEW_VERSION .
+        docker build -t ocantill4/nest-app:latest .
     
     - name: Push Docker image
+      env:
+        NEW_VERSION: ${{ steps.version.outputs.version }}
       run: |
-        docker push ocantill4/nest-app:1.0.2
+        docker push ocantill4/nest-app:$NEW_VERSION
+        docker push ocantill4/nest-app:latest
